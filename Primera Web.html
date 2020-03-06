@@ -2,9 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="jumbotron-billboard.css" rel="stylesheet" type="text/css">
+    <title>GIT_DSA</title>
 
+    <script>
+        var n;
+        $(document).ready(function(){
+            $("#hide_repo").hide();
+            $("#github").hide();
+            $("#boton1").click(function(){
+                $("#cuerpo_tabla").html("");
+                $("#tabla").show();
+                $.get("https://api.github.com/users/"+ $("#test").val(),function(data){
+                    avatar = data.avatar_url;
+                    login = data.login;
+                    rep = data.public_repos;
+                    $("#repo").text(rep);
+                    document.getElementById('f_perfil').src=avatar;
+                    document.getElementById('f_perfil').width='150';
+                    document.getElementById('f_perfil').height='150';
+                    document.getElementById('github').href= "https://github.com/" + $("#test").val();
+                    $("#logeo").text("Usuario: "+ login);
+                    $("#repo").text(rep);
+                    $("#hide_repo").show();
+                    $("#github").show();
+                });
+
+                $.get("https://api.github.com/users/"+ $("#test").val() + "/repos", function(data){
+                    $.each(data,function(index, data){
+                        name = data.name;
+                        description = data.description;
+                        stargazers_count = data.stargazers_count;
+                        N_fila = '<tr>' + '<td>' + name + '</td>' + '<td>' + description + '</td>' + '<td>' + stargazers_count + '</td>' + '</tr>';
+                        $("#tabla").append(N_fila);
+                    });
+
+                });
+            });
+        });
+
+    </script>
+</head>
+<body background="https://miro.medium.com/max/1125/1*wotzQboYWAfaj-7bvGNIkQ.png" >
+    <div id="Introducción" class="page-header">
+        <h1>Rastreador de GITHUB</h1>
+    </div>
+    <h2 class="well well-sm" style="color:navy">Porfavor introduce el nombre de usuario en GitHub:</h2>
+    <div class="container">
+        <div class="jumbotron jumbotron-billboard">
+            <div class="img"></div>
+            <div class="container">
+            <p style="color:Black">Nombre de usuario: <input type="text" id="test" value="EgidoPol"></p>
+            <div id="boton1" class="btn-group btn-group-justified">
+                <a href="#" class="btn btn-info">Buscar</a>
+            </div>
+            <br>
+            <p id="logeo"></p>
+            <img id="f_perfil" src="" class="img-responsive"  class="img-thumbnail" width="" height=""><br>
+            <a href="" class="btn btn-info" id="github">Perfil</a><br><br>
+            <p2 id="hide_repo">Número de repositorios: <span class="badge" id="repo"></span></p2>
+            <div>
+                <table id="tabla" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Seguidores</th>
+                    </tr>
+                    </thead>
+                    <tbody id ="cuerpo_tabla"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    </div>
 </body>
 </html>
